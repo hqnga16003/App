@@ -1,4 +1,4 @@
-import { Button, TextInput, TouchableOpacity } from "react-native";
+import { Alert, Button, TextInput, TouchableOpacity } from "react-native";
 import { View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -48,10 +48,24 @@ export default function RegisterScreen({ navigation }) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        if (data.id != null) {
+          Alert.alert(
+            "Đăng ký thành công",
+            "Mời bạn đăng nhập",
+            [{ text: "OK", onPress: () => navigation.replace("Login") }],
+            { cancelable: false }
+          );
+        } else {
+          throw new Error("Đăng ký thất bại");
+        }
       })
       .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
+        Alert.alert(
+          "Đăng ký tài khoản thất bại!",
+          "Mời bạn đăng ký lại",
+          [{ text: "OK" }],
+          { cancelable: false }
+        );
       });
   };
   return (
@@ -75,7 +89,7 @@ export default function RegisterScreen({ navigation }) {
 
       <View style={styles.row}>
         <View style={styles.icon}>
-          <Icon name="lock" size={25} color={"white"}></Icon>
+          <Icon name="user" size={25} color={"white"}></Icon>
         </View>
         <TextInput
           style={styles.input}

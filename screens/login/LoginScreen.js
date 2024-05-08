@@ -18,9 +18,9 @@ import { useState } from "react";
 
 export default function LoginScreen({ navigation }) {
   const [textInputValues, setTextInputValues] = useState({
-    client_id: "DYLK6NWr7bxIi3R5fnLRKbWNBrKSZm4NxkGq7Ol3",
+    client_id: "mmqa0Je637Bh1TlOqRagzxFB0qjbioyoEoSu6PXB",
     client_secret:
-      "o0j6xPxQ0DXUidurYv6iuV96K2W69DuTdrSU88JlHxDWGNf1FlWtsSVQdoppaXRKvht7iNkbgegC9OvXiWVg61WEUEXwz92gAcWvZ1oKJl740IUrpNjtRWIHZkNx3gae",
+      "OIbtPFlaieI3tSh5pcwOdSJdxQ6x0DDe2s1a3EOOc1wBNGrwUT3ysG3GrYjV0noxwrDO5VNfQQzoAKBFvlF7Yjg9rAQX0uSuiVimAtbKEGfCd3jLdiNvtudu4YTxK6Ax",
     grant_type: "password",
     username: "",
     password: "",
@@ -32,10 +32,32 @@ export default function LoginScreen({ navigation }) {
       [inputName]: text,
     });
   };
-
+  
   const handleSubmit = () => {
-    // Xử lý logic khi form được submit ở đây
-    console.log(textInputValues);
+    fetch("https://ngahq10.pythonanywhere.com/o/token/", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify(textInputValues),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (true) {
+          console.log(data)
+        } else {
+          throw new Error("Đăng ký thất bại");
+        }
+      })
+      .catch((error) => {
+        Alert.alert(
+          "Đăng ký tài khoản thất bại!",
+          "Mời bạn đăng ký lại",
+          [{ text: "OK", }],
+          { cancelable: false }
+        );
+      });
   };
   return (
     // <Formik
@@ -106,6 +128,14 @@ export default function LoginScreen({ navigation }) {
         }}
       >
         <Text style={styles.content}>Register now</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => {
+          navigation.replace("Main");
+        }}
+      >
+        <Text style={styles.content}>Home</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
