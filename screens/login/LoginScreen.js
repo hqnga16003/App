@@ -1,4 +1,4 @@
-import { Button, TextInput, TouchableOpacity } from "react-native";
+import { Alert, Button, TextInput, TouchableOpacity } from "react-native";
 import { View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FAIcon from "react-native-vector-icons/FontAwesome";
@@ -6,6 +6,9 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
+
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // const SignupSchema = Yup.object().shape({
 //   email: Yup.string()
@@ -32,32 +35,86 @@ export default function LoginScreen({ navigation }) {
       [inputName]: text,
     });
   };
+
+  const saveToken = async (token) => {
+    try {
+      await AsyncStorage.setItem('@token', token);
+      console.log('Token đã được lưu trữ');
+    } catch (error) {
+      console.log('Lỗi khi lưu trữ token:', error);
+    }
+  };
+
+  const getToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('@token');
+      if (token !== null) {
+        console.log('Token đã được lấy:', token);
+        return token;
+      } else {
+        console.log('Không tìm thấy token');
+        return null;
+      }
+    } catch (error) {
+      console.log('Lỗi khi lấy token:', error);
+      return null;
+    }
+  };
+
+  // Hàm xóa token
+  const removeToken = async () => {
+    try {
+      await AsyncStorage.removeItem('@token');
+      console.log('Token đã được xóa khỏi bộ nhớ');
+    } catch (error) {
+      console.log('Lỗi khi xóa token:', error);
+    }
+  };
   
-  const handleSubmit = () => {
-    fetch("https://ngahq10.pythonanywhere.com/o/token/", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json; charset=utf-8",
-      },
-      body: JSON.stringify(textInputValues),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (true) {
-          console.log(data)
-        } else {
-          throw new Error("Đăng ký thất bại");
+  
+  const handleSubmit = async () => {
+    if (!textInputValues.username || !textInputValues.password) {
+      Alert.alert(
+        'Vui lòng điền đầy đủ thông tin tài khoản!',
+        '',
+        [{ text: 'OK' }],
+        { cancelable: false }
+      );
+      return; // Dừng hàm nếu không điền đầy đủ thông tin
+    }
+    
+    try {
+      const formData = new FormData();
+      formData.append("client_id", textInputValues.client_id);
+      formData.append("client_secret", textInputValues.client_secret);
+      formData.append("username", textInputValues.username);
+      formData.append("password", textInputValues.password);
+      formData.append("grant_type", textInputValues.grant_type);
+
+
+      const response = await fetch(
+        "https://ngahq10.pythonanywhere.com/o/token/",
+        {// co headers la bi loi network request failed
+          method: "POST",
+          body: formData,
         }
-      })
-      .catch((error) => {
-        Alert.alert(
-          "Đăng ký tài khoản thất bại!",
-          "Mời bạn đăng ký lại",
-          [{ text: "OK", }],
-          { cancelable: false }
-        );
-      });
+      );
+
+      const data = await response.json();
+      if (data.access_token) {
+       saveToken(data.access_token);
+       navigation.replace("Main");
+      } else {
+        throw new Error("Đăng nhập thất bại!");
+      }
+    } catch (error) {
+      Alert.alert(
+        "Đăng nhập tài khoản thất bại!",
+        "Mời bạn đăng nhập lại",
+        [{ text: "OK" }],
+        { cancelable: false }
+      );
+    }
   };
   return (
     // <Formik
@@ -130,21 +187,7 @@ export default function LoginScreen({ navigation }) {
         <Text style={styles.content}>Register now</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        onPress={() => {
-          navigation.replace("Main");
-        }}
-      >
-        <Text style={styles.content}>Home</Text>
-      </TouchableOpacity>
 
-      <TouchableOpacity
-        onPress={() => {
-          navigation.replace("Location");
-        }}
-      >
-        <Text style={styles.content}>location now</Text>
-      </TouchableOpacity>
     </View>
     // )}
     // </Formik>

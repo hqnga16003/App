@@ -31,7 +31,7 @@ export default function MainScreen() {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Ticket"
         component={TicketScreen}
         options={{
@@ -39,7 +39,7 @@ export default function MainScreen() {
             <IonIcons name="ticket" size={20} color={color} />
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
