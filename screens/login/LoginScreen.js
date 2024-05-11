@@ -101,6 +101,7 @@ export default function LoginScreen({ navigation }) {
       );
 
       const data = await response.json();
+      console.log(data);
       if (data.access_token) {
        saveToken(data.access_token);
        navigation.replace("Main");
