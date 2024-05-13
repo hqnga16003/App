@@ -1,5 +1,5 @@
 import { Alert, Button, TextInput, TouchableOpacity } from "react-native";
-import { View, Text, StyleSheet , Image} from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FAIcon from "react-native-vector-icons/FontAwesome";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -7,9 +7,10 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
 
-
+import LottieView from 'lottie-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const img1 = require('../../../assets/images.jpg')
+const img1 = require('../../assets/load_login.json')
+
 
 // const SignupSchema = Yup.object().shape({
 //   email: Yup.string()
@@ -71,8 +72,8 @@ export default function LoginScreen({ navigation }) {
       console.log('Lỗi khi xóa token:', error);
     }
   };
-  
-  
+
+
   const handleSubmit = async () => {
     if (!textInputValues.username || !textInputValues.password) {
       Alert.alert(
@@ -83,7 +84,7 @@ export default function LoginScreen({ navigation }) {
       );
       return; // Dừng hàm nếu không điền đầy đủ thông tin
     }
-    
+
     try {
       const formData = new FormData();
       formData.append("client_id", textInputValues.client_id);
@@ -104,8 +105,8 @@ export default function LoginScreen({ navigation }) {
       const data = await response.json();
       console.log(data);
       if (data.access_token) {
-       saveToken(data.access_token);
-       navigation.replace("Main");
+        saveToken(data.access_token);
+        navigation.replace("Main");
       } else {
         throw new Error("Đăng nhập thất bại!");
       }
@@ -127,7 +128,7 @@ export default function LoginScreen({ navigation }) {
     // validationSchema={SignupSchema}>
     // {({values, errors, touched, handleChange, setFieldTouched, isValid, handleSubmit}) => (
     <View style={styles.container}>
-      <Image source={img1} style={{ width: 150, height: 150, borderRadius: 25 }} />
+      <LottieView source={img1} style={{height:200,width:200}} autoPlay loop />
 
       <Text style={[styles.text, { marginBottom: 0 }]}>Welcome!</Text>
       <Text style={[{ marginBottom: 30 }, styles.content]}>
@@ -142,9 +143,9 @@ export default function LoginScreen({ navigation }) {
           style={styles.input}
           placeholder="Username"
           onChangeText={(text) => handleInputChange("username", text)}
-          // value={values.email}
-          // onChangeText={handleChange('email')}
-          // onBlur={() => setFieldTouched('email')}
+        // value={values.email}
+        // onChangeText={handleChange('email')}
+        // onBlur={() => setFieldTouched('email')}
         ></TextInput>
       </View>
       {/* {touched.email && errors.email && (
@@ -160,9 +161,9 @@ export default function LoginScreen({ navigation }) {
           placeholder="Password"
           secureTextEntry={true}
           onChangeText={(text) => handleInputChange("password", text)}
-          // value={values.password}
-          // onChangeText={handleChange('password')}
-          // onBlur={() => setFieldTouched('password')}
+        // value={values.password}
+        // onChangeText={handleChange('password')}
+        // onBlur={() => setFieldTouched('password')}
         ></TextInput>
       </View>
       {/* {touched.password && errors.password && (
@@ -173,7 +174,7 @@ export default function LoginScreen({ navigation }) {
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={handleSubmit}
-          // disabled={!isValid}
+        // disabled={!isValid}
         >
           <Text style={{ fontSize: 16, color: "white" }}>Login</Text>
         </TouchableOpacity>
