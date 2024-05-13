@@ -1,5 +1,5 @@
 import { Alert, Button, TextInput, TouchableOpacity } from "react-native";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet , Image} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FAIcon from "react-native-vector-icons/FontAwesome";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -9,6 +9,7 @@ import { useState } from "react";
 
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+const img1 = require('../../../assets/images.jpg')
 
 // const SignupSchema = Yup.object().shape({
 //   email: Yup.string()
@@ -126,6 +127,8 @@ export default function LoginScreen({ navigation }) {
     // validationSchema={SignupSchema}>
     // {({values, errors, touched, handleChange, setFieldTouched, isValid, handleSubmit}) => (
     <View style={styles.container}>
+      <Image source={img1} style={{ width: 150, height: 150, borderRadius: 25 }} />
+
       <Text style={[styles.text, { marginBottom: 0 }]}>Welcome!</Text>
       <Text style={[{ marginBottom: 30 }, styles.content]}>
         Sign in to continue
