@@ -10,6 +10,7 @@ import { useState } from "react";
 import LottieView from 'lottie-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const img1 = require('../../assets/load_login.json')
+const img2 = require('../../assets/load.json')
 
 
 // const SignupSchema = Yup.object().shape({
@@ -22,6 +23,8 @@ const img1 = require('../../assets/load_login.json')
 // });
 
 export default function LoginScreen({ navigation }) {
+  const [isLoading, setIsLoading] = useState(false);
+
   const [textInputValues, setTextInputValues] = useState({
     client_id: "mmqa0Je637Bh1TlOqRagzxFB0qjbioyoEoSu6PXB",
     client_secret:
@@ -86,6 +89,7 @@ export default function LoginScreen({ navigation }) {
     }
 
     try {
+      setIsLoading(true);
       const formData = new FormData();
       formData.append("client_id", textInputValues.client_id);
       formData.append("client_secret", textInputValues.client_secret);
@@ -107,10 +111,14 @@ export default function LoginScreen({ navigation }) {
       if (data.access_token) {
         saveToken(data.access_token);
         navigation.replace("Main");
+        
       } else {
+
+        setIsLoading(false);
         throw new Error("Đăng nhập thất bại!");
       }
     } catch (error) {
+      setIsLoading(false);
       Alert.alert(
         "Đăng nhập tài khoản thất bại!",
         "Mời bạn đăng nhập lại",
@@ -120,82 +128,78 @@ export default function LoginScreen({ navigation }) {
     }
   };
   return (
-    // <Formik
-    // initialValues={{
-    //   email: '',
-    //   password: '',
-    // }}
-    // validationSchema={SignupSchema}>
-    // {({values, errors, touched, handleChange, setFieldTouched, isValid, handleSubmit}) => (
     <View style={styles.container}>
-      <LottieView source={img1} style={{height:200,width:200}} autoPlay loop />
-
-      <Text style={[styles.text, { marginBottom: 0 }]}>Welcome!</Text>
-      <Text style={[{ marginBottom: 30 }, styles.content]}>
-        Sign in to continue
-      </Text>
-
-      <View style={styles.row}>
-        <View style={styles.icon}>
-          <Icon name="user" size={25} color={"white"}></Icon>
-        </View>
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          onChangeText={(text) => handleInputChange("username", text)}
-        // value={values.email}
-        // onChangeText={handleChange('email')}
-        // onBlur={() => setFieldTouched('email')}
-        ></TextInput>
+      {isLoading ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <LottieView source={img2} style={{ width: 200, height: 200 }} autoPlay loop />
       </View>
-      {/* {touched.email && errors.email && (
-          <Text style={styles.errorTxt}>{errors.email}</Text>
-      )} */}
-
-      <View style={styles.row}>
-        <View style={styles.icon}>
-          <Icon name="lock" size={25} color={"white"}></Icon>
-        </View>
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry={true}
-          onChangeText={(text) => handleInputChange("password", text)}
-        // value={values.password}
-        // onChangeText={handleChange('password')}
-        // onBlur={() => setFieldTouched('password')}
-        ></TextInput>
-      </View>
-      {/* {touched.password && errors.password && (
-          <Text style={styles.errorTxt}>{errors.password}</Text>
-      )} */}
-
-      <View style={styles.row}>
-        <TouchableOpacity
-          style={styles.buttonContainer}
-          onPress={handleSubmit}
-        // disabled={!isValid}
-        >
-          <Text style={{ fontSize: 16, color: "white" }}>Login</Text>
-        </TouchableOpacity>
-      </View>
-
-      <Text style={{ fontSize: 14, margin: 20, marginBottom: 5 }}>
-        Don't have account?
-      </Text>
-
-      <TouchableOpacity
-        onPress={() => {
-          navigation.replace("Register");
-        }}
-      >
-        <Text style={styles.content}>Register now</Text>
-      </TouchableOpacity>
-
-
+      ) : (
+        <>
+          <LottieView source={img1} style={{ height: 200, width: 200 }} autoPlay loop />
+  
+          <Text style={[styles.text, { marginBottom: 0 }]}>Welcome!</Text>
+          <Text style={[{ marginBottom: 30 }, styles.content]}>
+            Sign in to continue
+          </Text>
+  
+          <View style={styles.row}>
+            <View style={styles.icon}>
+              <Icon name="user" size={25} color={"white"} />
+            </View>
+            <TextInput
+              style={styles.input}
+              placeholder="Username"
+              onChangeText={(text) => handleInputChange("username", text)}
+            // value={values.email}
+            // onChangeText={handleChange('email')}
+            // onBlur={() => setFieldTouched('email')}
+            />
+          </View>
+          {/* {touched.email && errors.email && (
+              <Text style={styles.errorTxt}>{errors.email}</Text>
+          )} */}
+          <View style={styles.row}>
+            <View style={styles.icon}>
+              <Icon name="lock" size={25} color={"white"} />
+            </View>
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              secureTextEntry={true}
+              onChangeText={(text) => handleInputChange("password", text)}
+            // value={values.password}
+            // onChangeText={handleChange('password')}
+            // onBlur={() => setFieldTouched('password')}
+            />
+          </View>
+          {/* {touched.password && errors.password && (
+              <Text style={styles.errorTxt}>{errors.password}</Text>
+          )} */}
+  
+          <View style={styles.row}>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={handleSubmit}
+            // disabled={!isValid}
+            >
+              <Text style={{ fontSize: 16, color: "white" }}>Login</Text>
+            </TouchableOpacity>
+          </View>
+  
+          <Text style={{ fontSize: 14, margin: 20, marginBottom: 5 }}>
+            Don't have account?
+          </Text>
+  
+          <TouchableOpacity
+            onPress={() => {
+              navigation.replace("Register");
+            }}
+          >
+            <Text style={styles.content}>Register now</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </View>
-    // )}
-    // </Formik>
   );
 }
 
