@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Picker } from "@react-native-picker/picker";
 import { Button, Card, Divider } from "@rneui/themed";
+import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import {
   View,
@@ -128,9 +129,6 @@ export default function HomeScreen({ navigation }) {
       }}
       style={styles.container}
     >
-      <Text style={{ color: "black", textAlign: "center", fontSize: 30 }}>
-        location
-      </Text>
       <View style={{ flex: 1, alignItems: "center" }}>
         <View
           style={{
@@ -201,7 +199,7 @@ export default function HomeScreen({ navigation }) {
               }}
               onPress={() => setModalVisible(true)}
             >
-              <Text style={{ fontSize: 20 }}>{day ? day : "Chọn ngày"}</Text>
+              <Text style={{ fontSize: 20 }}>{format(new Date(day), "dd-MM-yyyy") ? format(new Date(day), "dd-MM-yyyy") : "Chọn ngày"}</Text>
             </TouchableOpacity>
             <Modal
               animationType="slide"
@@ -252,21 +250,29 @@ export default function HomeScreen({ navigation }) {
         <ScrollView style={{ width: 500 }}>
           {busRoutes.map((b, index) => {
             return (
-              <ImageBackground key={index}
+              <ImageBackground
+                key={index}
                 source={{
                   uri: "https://cdn3.vectorstock.com/i/1000x1000/30/72/bus-driving-to-school-background-flat-style-vector-21743072.jpg",
                 }}
-                style={{ padding: 50 }}
+                style={{ padding: 30 }}
               >
-                <View >
+                <View>
                   <Card.Title style={styles.whiteColor}>
                     {b.bus_route}
                   </Card.Title>
                   <Card.Divider />
                   <View style={{ position: "relative", alignItems: "center" }}>
-                    <Text style={{margin: 5,...styles.whiteColor}}>
-                      Thời gian: {b.departure_time.substring(0, 5)} -{" "}
+                    <Text style={{ margin: 5, ...styles.whiteColor }}>
+                      Ngày khởi hành: {b.departure_date}
+                    </Text>
+                    <Text style={{ margin: 5, ...styles.whiteColor }}>
+                      Giờ khởi hành: {b.departure_time.substring(0, 5)} - Giờ
+                      đến:
                       {b.arrival_time.substring(0, 5)}
+                    </Text>
+                    <Text style={{ margin: 5, ...styles.whiteColor }}>
+                      Biển số xe: {b.bus_license_plate}
                     </Text>
 
                     <Text style={styles.whiteColor}>
