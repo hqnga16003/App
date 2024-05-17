@@ -17,12 +17,10 @@ export default function TicketScreen({ route, navigation }) {
   const { busRouteId } = route.params;
 
   //re-render component
-  const [ isReRender, setIsReRender ] = useState(false);
+  const [isReRender, setIsReRender] = useState(false);
 
   //   id của các vét đã đặt
   const [orderedTicketID, setOrderedTicketID] = useState([]);
-
-
 
   // Mảng chứa các nút từ 1 đến 12
   const buttons = Array.from({ length: 12 }, (_, i) => i + 1);
@@ -69,7 +67,7 @@ export default function TicketScreen({ route, navigation }) {
             orderedTickets.push(d.seat_number);
           });
 
-          setOrderedTicketID(orderedTickets)
+          setOrderedTicketID(orderedTickets);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -79,7 +77,6 @@ export default function TicketScreen({ route, navigation }) {
 
     fetchData();
   }, [isReRender]);
-
 
   // đặt vé
   const orderTicket = async (seat_number) => {
@@ -137,37 +134,40 @@ export default function TicketScreen({ route, navigation }) {
 
   return (
     <>
-    <TouchableOpacity
-    style={{marginTop: 60, ...styles.button}}
+      <TouchableOpacity
+        style={{ marginTop: 60, ...styles.button }}
         onPress={() => {
           navigation.replace("Main");
         }}
       >
-        
-        <Text style={{ color:"#fff" ,...styles.content}}>
-          Về trang chủ
-        </Text>
+        <Text style={{ color: "#fff", ...styles.content }}>Về trang chủ</Text>
       </TouchableOpacity>
-    <View style={styles.container}>
-     <Text style={{fontSize: 40, color:"black", marginBottom: 50}}>Tất cả ghế ngồi</Text>
-      {/* Duyệt qua mảng rows để tạo các hàng */}
-      {rows.map((row, index) => (
-        <View key={index} style={styles.row}>
-          {/* Duyệt qua các nút trong từng hàng */}
-          {row.map((number) => (
-            <TouchableOpacity
-              key={number}
-              style={orderedTicketID.includes(number) ? styles.disabledButton : styles.button}
-              onPress={() => orderTicket(number)}
-              disabled={orderedTicketID.includes(number)}
-            >
-              <Icon name="chair" size={40} color="#fff" />
-              <Text style={{color:"#fff", fontSize: 20}}>{number}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      ))}
-    </View>
+      <View style={styles.container}>
+        <Text style={{ fontSize: 40, color: "black", marginBottom: 50 }}>
+          Tất cả ghế ngồi
+        </Text>
+        {/* Duyệt qua mảng rows để tạo các hàng */}
+        {rows.map((row, index) => (
+          <View key={index} style={styles.row}>
+            {/* Duyệt qua các nút trong từng hàng */}
+            {row.map((number) => (
+              <TouchableOpacity
+                key={number}
+                style={
+                  orderedTicketID.includes(number)
+                    ? styles.disabledButton
+                    : styles.button
+                }
+                onPress={() => orderTicket(number)}
+                disabled={orderedTicketID.includes(number)}
+              >
+                <Icon name="chair" size={40} color="#fff" />
+                <Text style={{ color: "#fff", fontSize: 20 }}>{number}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        ))}
+      </View>
     </>
   );
 }
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 5,
     alignItems: "center",
-    margin: 5
+    margin: 5,
   },
   buttonText: {
     color: "white",
@@ -201,6 +201,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 5,
     alignItems: "center", // Giảm độ mờ của nút khi bị vô hiệu hóa
-    margin: 5
+    margin: 5,
   },
 });

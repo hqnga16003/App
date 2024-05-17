@@ -1,9 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 
 export default function HistoryScreen() {
   const [userTickets, setUserTickets] = useState([]);
+
 
   const getToken = async () => {
     try {
@@ -49,20 +51,18 @@ export default function HistoryScreen() {
 
   return (
     <ScrollView>
-      <View >
+      <View>
         {userTickets.map((t, index) => {
+          const formattedDate = format(new Date(t.departure_date), "dd-MM-yyyy");
           return (
-            <View style={styles.container} key={index}>
-              <Text style={styles.title}>Chuyến: {t.bus_route}</Text>
-              <Text style={styles.description}>Ghế số: {t.seat_number}</Text>
-              <Text style={styles.description}>
-                Biển số xe: {t.bus_license_plate}
-              </Text>
-              <Text style={styles.date}>
-                Ngày khởi hành: {t.departure_date}{" "}
-              </Text>
-              <Text style={styles.date}>
-                Thời gian: {t.departure_time} - {t.arrival_time}
+            <View style = {styles.container} key={index}>
+              <Text>Chuyến: {t.bus_route}</Text>
+              <Text>Ghế số: {t.seat_number}</Text>
+              <Text>Biển số xe: {t.bus_license_plate}</Text>
+              <Text>Ngày khởi hành: {formattedDate} </Text>
+              <Text>
+                Giờ khởi hành: {t.departure_time.substring(0, 5)} - Giờ đến:{" "}
+                {t.arrival_time.substring(0, 5)}
               </Text>
             </View>
           );
@@ -74,13 +74,19 @@ export default function HistoryScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 10,
+    marginTop: 10,
   },
   text: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 16,
+  },
+  label: {
+    fontWeight: "bold",
+    marginRight: 10,
+    width: 70,
   },
 });
