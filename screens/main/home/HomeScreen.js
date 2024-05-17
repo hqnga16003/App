@@ -199,7 +199,7 @@ export default function HomeScreen({ navigation }) {
               }}
               onPress={() => setModalVisible(true)}
             >
-              <Text style={{ fontSize: 20 }}>{day? day : "Chọn ngày"}</Text>
+              <Text style={{ fontSize: 20 }}>{day ? format(new Date(day), "dd-MM-yyyy") : "Chọn ngày"}</Text>
             </TouchableOpacity>
             <Modal
               animationType="slide"
@@ -248,7 +248,10 @@ export default function HomeScreen({ navigation }) {
         {/* // tat ca chuyen xe */}
         <Divider />
         <ScrollView style={{ width: 500 }}>
-          {busRoutes.map((b, index) => {
+        {busRoutes.length === 0 ? (
+            <Text style={styles.noBusRoutesText}>Không có chuyến xe</Text>
+          ) : (
+          busRoutes.map((b, index) => {
             return (
               <ImageBackground
                 key={index}
@@ -297,7 +300,8 @@ export default function HomeScreen({ navigation }) {
                 </View>
               </ImageBackground>
             );
-          })}
+          })
+        )}
         </ScrollView>
       </View>
     </ImageBackground>
@@ -341,4 +345,10 @@ const styles = StyleSheet.create({
     paddingBottom: 20, // Đảm bảo khoảng cách dưới cùng của nội dung
   },
   whiteColor: { color: "white", fontSize: 20 },
+  noBusRoutesText: {
+    fontSize: 18,
+    color: "black",
+    textAlign: "center",
+    margin: 20,
+  },
 });
