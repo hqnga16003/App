@@ -252,13 +252,13 @@ export default function HomeScreen({ navigation }) {
         <ScrollView style={{ width: 500 }}>
           {busRoutes.map((b, index) => {
             return (
-              <ImageBackground
+              <ImageBackground key={index}
                 source={{
                   uri: "https://cdn3.vectorstock.com/i/1000x1000/30/72/bus-driving-to-school-background-flat-style-vector-21743072.jpg",
                 }}
                 style={{ padding: 50 }}
               >
-                <View key={index}>
+                <View >
                   <Card.Title style={styles.whiteColor}>
                     {b.bus_route}
                   </Card.Title>
