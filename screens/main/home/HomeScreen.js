@@ -199,7 +199,7 @@ export default function HomeScreen({ navigation }) {
               }}
               onPress={() => setModalVisible(true)}
             >
-              <Text style={{ fontSize: 20 }}>{format(new Date(day), "dd-MM-yyyy") ? format(new Date(day), "dd-MM-yyyy") : "Chọn ngày"}</Text>
+              <Text style={{ fontSize: 20 }}>{day? day : "Chọn ngày"}</Text>
             </TouchableOpacity>
             <Modal
               animationType="slide"
