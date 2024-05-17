@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Icon } from "@rneui/themed";
 import { useEffect, useState } from "react";
 import {
   View,
@@ -14,6 +15,9 @@ const buttonWidth = (width - 40) / 3 - 10; // Độ rộng mỗi button
 export default function TicketScreen({ route, navigation }) {
   // Nhận tham số busRouteId từ route.params
   const { busRouteId } = route.params;
+
+  //re-render component
+  const [ isReRender, setIsReRender ] = useState(false);
 
   //   id của các vét đã đặt
   const [orderedTicketID, setOrderedTicketID] = useState([]);
@@ -74,7 +78,7 @@ export default function TicketScreen({ route, navigation }) {
     };
 
     fetchData();
-  }, [orderedTicketID]);
+  }, [isReRender]);
 
 
   // đặt vé
@@ -110,7 +114,7 @@ export default function TicketScreen({ route, navigation }) {
 
               const data = await response.json();
               if (data.booking_status == "CONFIRMED") {
-                setOrderedTicketID([])
+                setIsReRender((prevState) => !prevState);
                 Alert.alert(
                   "Đặt vé thành công !",
                   "Mời bạn tiếp tục đặt vé",
@@ -134,15 +138,18 @@ export default function TicketScreen({ route, navigation }) {
   return (
     <>
     <TouchableOpacity
-    style={{marginTop: 50, ...styles.button}}
+    style={{marginTop: 60, ...styles.button}}
         onPress={() => {
           navigation.replace("Main");
         }}
       >
-        <Text style={{ color:"#fff" ,...styles.content}}>Về trang chủ</Text>
+        
+        <Text style={{ color:"#fff" ,...styles.content}}>
+          Về trang chủ
+        </Text>
       </TouchableOpacity>
     <View style={styles.container}>
-    
+     <Text style={{fontSize: 40, color:"black", marginBottom: 50}}>Tất cả ghế ngồi</Text>
       {/* Duyệt qua mảng rows để tạo các hàng */}
       {rows.map((row, index) => (
         <View key={index} style={styles.row}>
@@ -154,7 +161,8 @@ export default function TicketScreen({ route, navigation }) {
               onPress={() => orderTicket(number)}
               disabled={orderedTicketID.includes(number)}
             >
-              <Text style={styles.buttonText}>{number}</Text>
+              <Icon name="chair" size={40} color="#fff" />
+              <Text style={{color:"#fff", fontSize: 20}}>{number}</Text>
             </TouchableOpacity>
           ))}
         </View>
